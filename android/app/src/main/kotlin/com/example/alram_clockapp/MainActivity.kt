@@ -1,4 +1,4 @@
-package com.example.alaram_clockapp
+package com.example.alram_clockapp
 
 import io.flutter.embedding.android.FlutterActivity
 
