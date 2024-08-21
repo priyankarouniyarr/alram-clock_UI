@@ -13,7 +13,7 @@ class Homescreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddAlarm()),);
+            MaterialPageRoute(builder: (context) => AddAlarm(isEditing: false,)),);
         },
         child: Icon(Icons.add,size:40,color:Colors.blue),
         backgroundColor: Colors.grey[200], 

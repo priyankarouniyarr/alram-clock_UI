@@ -1,4 +1,5 @@
 import 'package:alaram_clockapp/homescreen.dart';
+import 'package:alaram_clockapp/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Homescreen(),
+      home: SplashScreen(),
     );
   }
 }

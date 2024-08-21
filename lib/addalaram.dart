@@ -1,26 +1,32 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 class AddAlarm extends StatefulWidget {
+  final bool isEditing; 
+
+  
+  AddAlarm({required this.isEditing});
+
   @override
   State<AddAlarm> createState() => _AddAlarmState();
 }
 
 class _AddAlarmState extends State<AddAlarm> {
-  int selectedHour = 0;//private variables
+  int selectedHour = 0;
   int selectedMinute = 0;
   String selectedPeriod = 'AM';
-  String selectedRingtone = 'Default'; // Default ringtone
-  bool isRepeat = false; 
-  bool vibrate = false; // Vibration option
-  bool deleteAfterOff = false; // Delete option
+  String selectedRingtone = 'Default';
+  bool isRepeat = false;
+  bool vibrate = false;
+  bool deleteAfterOff = false;
 
   void playRingtone(String ringtone) async {
     if (ringtone != 'Default') {
       final player = AudioPlayer();
-      await player.play('audio/$ringtone');
-      await Future.delayed(Duration(seconds: 10)); 
+      final audioPath = 'assets/audio/$ringtone';
+      await player.play(AssetSource(audioPath));
+      await Future.delayed(Duration(seconds: 10));
       player.stop();
     }
   }
@@ -34,12 +40,12 @@ class _AddAlarmState extends State<AddAlarm> {
         leading: IconButton(
           icon: Icon(Icons.close, color: Colors.black, size: 30),
           onPressed: () {
-            Navigator.pop(context); // Closes the screen
+            Navigator.pop(context);
           },
         ),
         title: Center(
           child: Text(
-            'Add Alarm',
+            widget.isEditing ? 'Edit Alarm' : 'Add Alarm',
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -58,7 +64,6 @@ class _AddAlarmState extends State<AddAlarm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // AM/PM Picker
                 Expanded(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.4,
@@ -85,24 +90,23 @@ class _AddAlarmState extends State<AddAlarm> {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: 0.5,
-                  color: Colors.grey, // Line color
+                  color: Colors.grey,
                 ),
-                // Hour Picker
                 Expanded(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.4,
                     child: CupertinoPicker.builder(
-                      itemExtent: 60,//height
+                      itemExtent: 60,
                       onSelectedItemChanged: (int index) {
                         setState(() {
                           selectedHour = (index % 12) + 1;
                         });
                       },
-                      childCount: null, // Makes the list infinite
+                      childCount: null,
                       itemBuilder: (BuildContext context, int index) {
                         return Center(
                           child: Text(
-                            '${(index % 12) + 1}', // Cycles through 1-12
+                            '${(index % 12) + 1}',
                             style: TextStyle(fontSize: 30),
                           ),
                         );
@@ -113,9 +117,8 @@ class _AddAlarmState extends State<AddAlarm> {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: 0.5,
-                  color: Colors.grey, // Line color
+                  color: Colors.grey,
                 ),
-                // Minute Picker
                 Expanded(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.4,
@@ -123,16 +126,15 @@ class _AddAlarmState extends State<AddAlarm> {
                       itemExtent: 60,
                       onSelectedItemChanged: (int index) {
                         setState(() {
-                          selectedMinute = index % 60;// Updates the selectedMinute when a new minute is selected.
-//index % 60 ensures that minutes cycle from 0 to 5
+                          selectedMinute = index % 60;
                         });
                       },
-                      childCount: null, // Makes the list infinite
+                      childCount: null,
                       itemBuilder: (BuildContext context, int index) {
                         return Center(
                           child: Text(
                             index % 60 < 10
-                                ? '0${index % 60}' // Adds leading 0 for minutes < 10
+                                ? '0${index % 60}'
                                 : '${index % 60}',
                             style: TextStyle(fontSize: 30),
                           ),
@@ -143,7 +145,6 @@ class _AddAlarmState extends State<AddAlarm> {
                 ),
               ],
             ),
-            // Ringtone Selection
             ListTile(
               title: Text('Ringtone'),
               subtitle: Text(selectedRingtone),
@@ -153,18 +154,17 @@ class _AddAlarmState extends State<AddAlarm> {
                     .map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value.replaceAll('.mp3', '')), // Display without .mp3
+                    child: Text(value.replaceAll('.mp3', '')),
                   );
                 }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedRingtone = newValue!;
-                    playRingtone(newValue); // Play selected ringtone
+                    playRingtone(newValue);
                   });
                 },
               ),
             ),
-            // Repeat 
             ListTile(
               title: Text('Repeat'),
               trailing: Transform.scale(
@@ -181,7 +181,6 @@ class _AddAlarmState extends State<AddAlarm> {
                 ),
               ),
             ),
-            // Vibrate Option
             ListTile(
               title: Text('Vibrate when alarm sounds'),
               trailing: Transform.scale(
@@ -198,7 +197,6 @@ class _AddAlarmState extends State<AddAlarm> {
                 ),
               ),
             ),
-            // Delete after goes off
             ListTile(
               title: Text('Delete after alarm goes off'),
               trailing: Transform.scale(

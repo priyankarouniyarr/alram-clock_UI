@@ -2,7 +2,6 @@ import 'package:alaram_clockapp/alramdetail.dart';
 import 'package:alaram_clockapp/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class Alrampage extends StatefulWidget {
   const Alrampage({super.key});
@@ -40,8 +39,6 @@ class _AlrampageState extends State<Alrampage> {
           Expanded(
             child: ListView(
               children: alarms.map<Widget>((alarm) {
-//var alarmtime=DateFormat('hh:mm:aa').format(alarm.alramDatetime)
-
                 return Container(
                   margin: EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
@@ -72,10 +69,20 @@ class _AlrampageState extends State<Alrampage> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Alramdetail()));
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25.0),
+                                      ),
+                                      child: Container(
+                                        padding: EdgeInsets.all(20.0),
+                                        child: AlramDetail()//page
+                                      ),
+                                    );
+                                  },
+                                );
                               },
                               child: Row(
                                 children: [
